@@ -55,6 +55,7 @@ public class RecyclerViewActivity extends Activity {
 
 		// init SuperSwipeRefreshLayout
 		swipeRefreshLayout = (SuperSwipeRefreshLayout) findViewById(R.id.swipe_refresh);
+		swipeRefreshLayout.setHeaderViewBackgroundColor(0xff888888);
 		swipeRefreshLayout.setHeaderView(createHeaderView());// add headerView
 		swipeRefreshLayout.setFooterView(createFooterView());
 		swipeRefreshLayout.setTargetScrollWithLayout(true);

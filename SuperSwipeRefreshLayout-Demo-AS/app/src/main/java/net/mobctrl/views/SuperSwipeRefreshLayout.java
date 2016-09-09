@@ -16,6 +16,7 @@ import android.os.Build;
 import android.os.Handler;
 import android.support.v4.view.MotionEventCompat;
 import android.support.v4.view.ViewCompat;
+import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.RecyclerView.LayoutManager;
@@ -611,6 +612,15 @@ public class SuperSwipeRefreshLayout extends ViewGroup {
                     return true;
                 }
             }
+        } else if (mTarget instanceof NestedScrollView) {
+            NestedScrollView nestedScrollView = (NestedScrollView) mTarget;
+            View view = (View) nestedScrollView.getChildAt(nestedScrollView.getChildCount() - 1);
+            if (view != null) {
+                int diff = (view.getBottom() - (nestedScrollView.getHeight() + nestedScrollView.getScrollY()));
+                if (diff == 0) {
+                    return true;
+                }
+            }
         }
         return false;
     }
@@ -1128,6 +1138,10 @@ public class SuperSwipeRefreshLayout extends ViewGroup {
     private void updateFooterViewPosition() {
         mFooterViewContainer.setVisibility(View.VISIBLE);
         mFooterViewContainer.bringToFront();
+        //针对4.4及之前版本的兼容
+        if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.KITKAT) {
+            mFooterViewContainer.getParent().requestLayout();
+        }
         mFooterViewContainer.offsetTopAndBottom(-pushDistance);
         updatePushDistanceListener();
     }
